@@ -15,17 +15,13 @@ public class Activity {
 
     private String descripcion;
 
-    @ManyToOne
-    @JoinColumn(name = "idproyecto")
-    private Proyect proyecto;
+    private int idproyecto;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_owner")
-    private User usuarioowner;
+    private String usuario_owner;
 
     private int peso;
 
-    private int estado;
+    private boolean estado;
 
     public int getIdactividad() {
         return idactividad;
@@ -51,20 +47,20 @@ public class Activity {
         this.descripcion = descripcion;
     }
 
-    public Proyect getProyecto() {
-        return proyecto;
+    public int getIdproyecto() {
+        return idproyecto;
     }
 
-    public void setProyecto(Proyect proyecto) {
-        this.proyecto = proyecto;
+    public void setIdproyecto(int idproyecto) {
+        this.idproyecto = idproyecto;
     }
 
-    public User getUsuarioowner() {
-        return usuarioowner;
+    public String getUsuario_owner() {
+        return usuario_owner;
     }
 
-    public void setUsuarioowner(User usuarioowner) {
-        this.usuarioowner = usuarioowner;
+    public void setUsuario_owner(String usuario_owner) {
+        this.usuario_owner = usuario_owner;
     }
 
     public int getPeso() {
@@ -75,11 +71,11 @@ public class Activity {
         this.peso = peso;
     }
 
-    public int getEstado() {
+    public boolean isEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
 }

@@ -7,13 +7,10 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "correo")
     private String correo;
 
-    @ManyToOne
-    @JoinColumn(name = "idarea")
-    private Area area;
+    private int idarea;
 
     private String nombres;
     private String apellidos;
@@ -26,12 +23,12 @@ public class User {
         this.correo = correo;
     }
 
-    public Area getArea() {
-        return area;
+    public int getIdarea() {
+        return idarea;
     }
 
-    public void setArea(Area area) {
-        this.area = area;
+    public void setIdarea(int idarea) {
+        this.idarea = idarea;
     }
 
     public String getNombres() {
