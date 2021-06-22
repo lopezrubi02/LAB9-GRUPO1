@@ -1,7 +1,8 @@
 package com.example.lab9grupo1.controller;
 
-import com.example.lab9grupo1.entity.Area;
+import com.example.lab9grupo1.entity.*;
 import com.example.lab9grupo1.repository.AreaRepository;
+import com.example.lab9grupo1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -18,6 +20,8 @@ public class AreaWebService {
 
     @Autowired
     AreaRepository areaRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping(value = "/area",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -68,6 +72,36 @@ public class AreaWebService {
     }
 
     //falta obtener area con lista ususarios
+    @GetMapping(value = "/areaConUsuarios/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity listarProyectosActividadades(@PathVariable("id") String idStr){
+
+        HashMap<String,Object> responseMap = new HashMap<>();
+        try{
+            int id = Integer.parseInt(idStr);
+            Optional<Area> opt = areaRepository.findById(id);
+            if(opt.isPresent()){
+                Area area = opt.get();
+                List<User> usuarioList = userRepository.findAllByIdareaEquals(area.getIdarea());
+
+                AreaDTO areaDTO = new AreaDTO();
+                areaDTO.setIdarea(area.getIdarea());
+                areaDTO.setNombrearea(area.getNombrearea());
+                areaDTO.setListaUsuarios(usuarioList);
+
+                responseMap.put("area",areaDTO);
+                responseMap.put("estado","ok");
+                return new ResponseEntity(responseMap,HttpStatus.OK);
+            }else{
+                responseMap.put("msg","No se encontro el proyecto con el id:"+id);
+                responseMap.put("estado","error");
+                return new ResponseEntity(responseMap,HttpStatus.BAD_REQUEST);
+            }
+        }catch (NumberFormatException e){
+            responseMap.put("msg","El ID debe ser un número");
+            responseMap.put("estado","error");
+            return new ResponseEntity(responseMap,HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PutMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity actualizarArea(@RequestBody Area area) {
