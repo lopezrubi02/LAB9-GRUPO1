@@ -15,7 +15,7 @@ public class User {
     @JoinColumn(name = "idarea")
     private Area area;
 
-    private String nombre;
+    private String nombres;
     private String apellidos;
 
     public String getCorreo() {
@@ -34,12 +34,12 @@ public class User {
         this.area = area;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombres() {
+        return nombres;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
     }
 
     public String getApellidos() {
