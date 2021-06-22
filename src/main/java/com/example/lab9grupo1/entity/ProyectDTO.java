@@ -1,21 +1,14 @@
 package com.example.lab9grupo1.entity;
 
+import java.util.List;
 
-import javax.persistence.*;
+public class ProyectDTO {
 
-@Entity
-@Table(name="proyectos")
-public class Proyect {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idproyecto")
     private int idproyecto;
-
-    @Column(name="nombreProyecto")
     private String nombreproyecto;
-
-    @Column(name="usuario_owner")
     private String usuario_owner;
+    private List<Activity> listaActividades;
+
 
     public int getIdproyecto() {
         return idproyecto;
@@ -39,5 +32,13 @@ public class Proyect {
 
     public void setUsuario_owner(String usuario_owner) {
         this.usuario_owner = usuario_owner;
+    }
+
+    public List<Activity> getListaActividades() {
+        return listaActividades;
+    }
+
+    public void setListaActividades(List<Activity> listaActividades) {
+        this.listaActividades = listaActividades;
     }
 }

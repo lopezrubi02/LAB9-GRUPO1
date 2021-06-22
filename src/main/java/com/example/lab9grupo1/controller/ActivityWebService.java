@@ -36,7 +36,7 @@ public class ActivityWebService {
 
         activityRepository.save(actividad);
         if (fetchId) {
-            responseMap.put("Id", actividad.getIdactividad());
+            responseMap.put("id", actividad.getIdactividad());
         }
         responseMap.put("estado", "creado");
         return new ResponseEntity(responseMap, HttpStatus.CREATED);
