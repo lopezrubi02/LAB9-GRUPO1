@@ -110,6 +110,51 @@ public class ProyectWebService {
         }
     }
 
+    @PutMapping(value = "/proyecto",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity editarProyecto(@RequestBody Proyect proyect){
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        if(proyect.getIdproyecto()>0){
+            Optional<Proyect> proyecyOpt = proyectRepository.findById(proyect.getIdproyecto());
+            if(proyecyOpt.isPresent()){
+                proyectRepository.save(proyect);
+                responseMap.put("estado","actualizado");
+                return new ResponseEntity(responseMap,HttpStatus.OK);
+            }else{
+                responseMap.put("estado","error");
+                responseMap.put("msg","El id del proyecto a actualizar no existe");
+                return new ResponseEntity(responseMap,HttpStatus.BAD_REQUEST);
+            }
+        }else {
+            responseMap.put("estado","error");
+            responseMap.put("msg","Se debe enviar un ID");
+            return new ResponseEntity(responseMap,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "/proyecto/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity borrarProyecto(@PathVariable("id") String idStr){
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        try{
+            int id = Integer.parseInt(idStr);
+            if(proyectRepository.existsById(id)){
+                proyectRepository.deleteById(id);
+                responseMap.put("estado","borrado exitoso");
+
+                return new ResponseEntity(responseMap,HttpStatus.OK);
+            }else{
+                responseMap.put("estado","error");
+                responseMap.put("msg","no se encontró el proyecto con id: " + id);
+                return new ResponseEntity(responseMap,HttpStatus.BAD_REQUEST);
+            }
+        }catch (NumberFormatException e){
+            responseMap.put("estado", "error");
+            responseMap.put("msg", "El ID debe ser un número");
+            return new ResponseEntity(responseMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity ExcepcionPost(HttpServletRequest request) {
