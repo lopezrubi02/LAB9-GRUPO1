@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +56,6 @@ public class AreaWebService {
         }
     }
 
-    //falta crear area
     @PostMapping(value = "/area", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity guardarArea(
             @RequestBody Area area,
@@ -62,6 +63,12 @@ public class AreaWebService {
 
         HashMap<String, Object> responseMap = new HashMap<>();
 
+        //valida que no mande vacío
+        if(area.getNombrearea().isEmpty()){
+            responseMap.put("estado", "error");
+            responseMap.put("msg", "Debe enviar un area");
+            return new ResponseEntity(responseMap, HttpStatus.BAD_REQUEST);
+        }
         areaRepository.save(area);
         if (fetchId) {
             responseMap.put("id", area.getIdarea());
@@ -71,7 +78,19 @@ public class AreaWebService {
 
     }
 
-    //falta obtener area con lista ususarios
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity gestionExcepcion(HttpServletRequest request) {
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        if (request.getMethod().equals("POST") || request.getMethod().equals("PUT")) {
+            responseMap.put("estado", "error");
+            responseMap.put("msg", "Debe enviar un area");
+        }
+        return new ResponseEntity(responseMap, HttpStatus.BAD_REQUEST);
+    }
+
+
+
     @GetMapping(value = "/areaConUsuarios/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity listarProyectosActividadades(@PathVariable("id") String idStr){
 
@@ -103,7 +122,7 @@ public class AreaWebService {
         }
     }
 
-    @PutMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/area", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity actualizarArea(@RequestBody Area area) {
 
         HashMap<String, Object> responseMap = new HashMap<>();
